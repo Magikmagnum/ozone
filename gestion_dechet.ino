@@ -2,12 +2,13 @@
 #include <Servo.h> // j'ai au préalable installé la librairie  Servo pour le servo moteur de type SG90
 
 
+
+
 // Définition des constantes pour les broches du capteur ultrason et du servo moteur
 #define TRIGGER_PIN 7
 #define ECHO_PIN 6
 #define MAX_DISTANCE 400
 #define MOTEUR_SIGNAL 9
-
 
 // Définition des constantes du script
 #define DELAY 1000
@@ -15,9 +16,14 @@
 #define ALLER_RETOUR true
 #define NOMBRE_DE_SCAN_PAR_DEMITOUR 4 // doit etre paire
 
+
+
+
 // Initialisation des objets NewPing et Servo
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
 Servo moteur;
+
+
 
 // Fonction de configuration initiale
 void setup() {
@@ -28,27 +34,26 @@ void setup() {
 
 // Boucle principale du programme
 void loop() {
-  scane_angle(); // Tourne le servo moteur à 0 degré et scane
+  
+  scane_angle(0); // Tourne le servo moteur à 0 degré et scane
+  scane_angle(45); // Tourne le servo moteur à 0 degré et scane
+  scane_angle(90); // Tourne le servo moteur à 90 degré et scane
+  scane_angle(135); // Tourne le servo moteur à 90 degré et scane
+  scane_angle(180); // Tourne le servo moteur à 180 degré et scane
+
+  if(ALLER_RETOUR) {
+    scane_angle(135); // Tourne le servo moteur à 90 degré et scane
+    scane_angle(90); // Tourne le servo moteur à 90 degré et scane
+    scane_angle(45); // Tourne le servo moteur à 0 degré et scane
+  }
+
   delay(PAUSE);
+
 }
 
-void scane_angle() {
-  // calcul de la portion angle
-  int step_angle = 180 / NOMBRE_DE_SCAN_PAR_DEMITOUR;
-
-  for(int i = 0; i >= step_angle; i++ ) {
-    int angle = i * step_angle;
-    affichage(mesure_distance());
-    tourner_servo(angle, DELAY); // Tourne le servo moteur à 0 degré pendant 1 secondes
-  }
-
-  if(ALLER_RETOUR == true) {
-    for(int i = step_angle; i = 1; i-- ) {
-      int angle = i * step_angle;
-      affichage(mesure_distance());
-      tourner_servo(angle, DELAY); // Tourne le servo moteur à 0 degré pendant 1 secondes
-    }
-  }
+void scane_angle(int degre) {
+  affichage(mesure_distance());
+  tourner_servo(degre, DELAY); // Tourne le servo moteur à 0 degré pendant 1 secondes
 }
 
 // Fonction pour tourner le servo moteur à un certain angle et une certaine vitesse
